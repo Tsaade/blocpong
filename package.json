@@ -1,0 +1,23 @@
+{
+  "name": "blocpng",
+  "version": "1.0.0",
+  "description": "Blong uses pure JavaScript and the HTML5 canvas element to create a Pong replica.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tsaade/blocpong.git"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Bloc Inc, Tarek Saade",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "~7.5.0",
+    "path": "^0.4.9"
+  },
+  "devDependencies": {
+    "connect-modrewrite": "^0.7.9",
+    "es5-shim": "^4.0.1"
+  }
+}
