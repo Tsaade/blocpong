@@ -28,6 +28,7 @@ var step = function() {
 // The update & render functions:
 var update = function() {
 	player.update();
+	computer.update(ball);
 	ball.update(player.paddle, computer.paddle);
 };
 
@@ -167,6 +168,25 @@ Ball.prototype.update = function(paddle1, paddle2) {
     	}
   	}
 };
+
+// The computer AI:
+Computer.prototype.update = function (ball) {
+	var y_pos = ball.y;
+	var diff = -((this.paddle.y + (this.paddle.height / 2)) - y_pos);
+	
+	if (diff < 0 && diff > -4) { // max speed left
+		diff = -5;
+	} else if (diff > 0 && diff < 4) { // max speed right
+		diff = 5;
+	}
+	this.paddle.move (0, diff);
+	if (this.paddle.y < 0) {
+		this.paddle.y = 0;
+	} else if (this.paddle.y + this.paddle.height > 400) {
+		this.paddle.y = 400 - this.paddle.height;
+	}
+};
+
 Paddle.prototype.move = function(x, y) {
 	this.x += x;
 	this.y += y;
