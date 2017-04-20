@@ -4,6 +4,9 @@ var animate = window.requestAnimationFrame ||
 			window.mozRequestAnimationFrame ||
 			function(callback) { window.setTimeout(callback, 1000/60) };
 
+var playerScore = 0;
+var computerScore = 0;
+
 // Canvas setup and 2d context:
 var canvas = document.getElementById('myCanvas');
 var width = 800;
@@ -17,6 +20,19 @@ window.onload = function() {
 	document.body.appendChild(canvas);
 	animate(step);
 };
+
+function drawPlayerScore() {
+	context.font = "bold 30px Verdana";
+	context.fillStyle = "#FFF"
+	context.fillText(playerScore + '   Player', 425, 40);
+}
+
+function drawComputerScore() {
+	context.font = "bold 30px Verdana";
+	context.fillStyle = "#FFF"
+	context.fillText('Computer   ' + computerScore, 155, 40);
+}
+
 
 // The step function:
 var step = function() {
@@ -35,7 +51,7 @@ var update = function() {
 var render = function() {
 	context.fillStyle = "#000";
 	context.fillRect(0, 0, width, height);
-
+	
 	//Draw table center dashed line
 	context.beginPath();
 	context.moveTo(400, 15);
@@ -48,6 +64,8 @@ var render = function() {
 	player.render();
 	computer.render();
 	ball.render();
+	drawPlayerScore();
+	drawComputerScore();
 };
 
 // Adding paddles and the ball:
@@ -144,11 +162,18 @@ Ball.prototype.update = function(paddle1, paddle2) {
 		this.y_speed = -this.y_speed;
 	}
 
-	if(this.x < 0 || this.x > 800) { // a point was scored
+	if(this.x < 0) { // a point was scored
 		this.x_speed = 3;
 		this.y_speed = 0;
 		this.x = 400;
 		this.y = 250;
+		playerScore += 1;
+	} else if (this.x > 800) {
+		this.x_speed = 3;
+		this.y_speed = 0;
+		this.x = 400;
+		this.y = 250;
+		computerScore += 1;		
 	}
 
 	if(top_x > 400) {
