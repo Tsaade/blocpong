@@ -7,6 +7,12 @@ var animate = window.requestAnimationFrame ||
 var playerScore = 0;
 var computerScore = 0;
 
+// Sounds:
+var bounceSound = new buzz.sound("sounds/bounce.mp3");
+var paddleSound = new buzz.sound("sounds/paddle.mp3");
+var cheeringSound = new buzz.sound("sounds/cheering.mp3");
+var gruntSound = new buzz.sound("sounds/grunt.mp3");
+
 // Canvas setup and 2d context:
 var canvas = document.getElementById('myCanvas');
 var width = 800;
@@ -32,7 +38,6 @@ function drawComputerScore() {
 	context.fillStyle = "#FFF"
 	context.fillText('Computer   ' + computerScore, 155, 40);
 }
-
 
 // The step function:
 var step = function() {
@@ -135,10 +140,10 @@ window.addEventListener("keyup", function(event) {
 Player.prototype.update = function() {
 	for(var key in keysDown) {
 		var value = Number(key);
-		if(value == 38) {
-			this.paddle.move(0, -5);
-		} else if (value == 40) {
-			this.paddle.move(0, 5);
+		if(value == 37) {
+			this.paddle.move(0, -8);
+		} else if (value == 39) {
+			this.paddle.move(0, 8);
 		} else {
 			this.paddle.move(0, 0);
 		}
@@ -157,9 +162,11 @@ Ball.prototype.update = function(paddle1, paddle2) {
 	if(this.y - 5 < 0) { // hitting the top wall
 		this.y = 5;
 		this.y_speed = -this.y_speed;
+		bounceSound.play();
 	} else if(this.y + 5 > 500) { // hitting the bottom wall
 		this.y = 495;
 		this.y_speed = -this.y_speed;
+		bounceSound.play();
 	}
 
 	if(this.x < 0) { // a point was scored
@@ -168,12 +175,22 @@ Ball.prototype.update = function(paddle1, paddle2) {
 		this.x = 400;
 		this.y = 250;
 		playerScore += 1;
+		cheeringSound.play();
+		if (playerScore === 11) {
+			alert('YOU WIN, CONGRATULATIONS!')
+			document.location.reload();
+		}
 	} else if (this.x > 800) {
 		this.x_speed = 3;
 		this.y_speed = 0;
 		this.x = 400;
 		this.y = 250;
-		computerScore += 1;		
+		computerScore += 1;
+		gruntSound.play();
+		if (computerScore === 11) {
+			alert('COMPUTER WINS, TRY AGAIN LATER!')
+			document.location.reload();			
+		}
 	}
 
 	if(top_x > 400) {
@@ -182,6 +199,7 @@ Ball.prototype.update = function(paddle1, paddle2) {
 			this.x_speed = -3;
 			this.y_speed += (paddle1.y_speed / 2);
 			this.x += this.x_speed;
+			paddleSound.play();
 		}
 	} else {
 
@@ -190,6 +208,7 @@ Ball.prototype.update = function(paddle1, paddle2) {
 			this.x_speed = 3;
 			this.y_speed += (paddle2.y_speed / 2);
 			this.x += this.x_speed;
+			paddleSound.play();
     	}
   	}
 };
